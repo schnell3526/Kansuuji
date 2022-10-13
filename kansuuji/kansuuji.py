@@ -1,46 +1,70 @@
 import math
 import re
+from typing import Union
 
+import mojimoji
 
+from .utils import (
+    KANJI_DIGIT_DICT,
+    KANJI_NUMBER_DICT,
+    KANJI_SMALL_DIGIT_DICT,
+    NUMBER_SET,
+    SMALL_DIGIT_SET,
+    KANJI_DIGIT_SET,
+    PATTERN_KANSUUJI,
+    PATTERN_DIGIT,
+    PATTERN_SYMBOLS,
+    PATTERN_LEFT_VALUE
+)
 
-KANJI_NUMBER_DICT = {
-    "零": 0, "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9,
-    "〇": 0, "壱": 1, "弐": 2, "参": 3, "肆": 4, "伍": 5, "陸": 6, "漆": 7, "捌": 8, "玖": 9
-}
-KANJI_SMALL_DIGIT_DICT = {"十": 1, "拾": 1, "什": 1, "百": 2, "佰": 2, "千": 3, "阡": 3, "仟": 3}
-KANJI_DIGIT_DICT = {
-    # "十": 1, "拾": 1, "什": 1, "百": 2, "佰": 2, "千": 3, "阡": 3, "仟": 3,
-    "万": 4, "萬": 4, "億": 8, "兆": 12, "京": 16, "垓": 20, "𥝱": 24, "穣": 28, "溝": 32, "澗": 36, "正": 40,
-    "載": 44, "極": 48, "恒河沙": 52, "阿僧祇": 56, "那由多": 60, "不可思議": 64, "無量大数": 68
-}
+def kanji2int(kanjis: Union[str, int]) -> int:
 
-NUMBER_SET = set(KANJI_NUMBER_DICT)
-SMALL_DIGIT_SET = set(KANJI_SMALL_DIGIT_DICT)
-KANJI_DIGIT_SET = set(KANJI_DIGIT_DICT)
+    if isinstance(kanjis, int): return kanjis
+    if not isinstance(kanjis, str): raise ValueError('Unsupported Data Type')
+    # normalization
+    kanjis = mojimoji.zen_to_han(kanjis, kana=False)
+    kanjis = PATTERN_SYMBOLS.sub('', kanjis)
 
-PATTERN_KANSUUJI = re.compile(r'|'.join(NUMBER_SET | SMALL_DIGIT_SET | KANJI_DIGIT_SET))
-
-def kanji2int(kanjis: str) -> int:
-    if kanjis in NUMBER_SET:
-        return KANJI_NUMBER_DICT[kanjis]
-
-    if kanjis in SMALL_DIGIT_SET:
-        return 10**KANJI_SMALL_DIGIT_DICT[kanjis]
-
-    if kanjis in KANJI_DIGIT_SET:
-        return 10**KANJI_DIGIT_DICT[kanjis]
+    if len(kanjis) == 1:
+        if kanjis in NUMBER_SET:
+            return KANJI_NUMBER_DICT[kanjis]
+        if kanjis in SMALL_DIGIT_SET:
+            return 10**KANJI_SMALL_DIGIT_DICT[kanjis]
+        if kanjis in KANJI_DIGIT_SET:
+            return 10**KANJI_DIGIT_DICT[kanjis]
 
     result = 0
-    current_num_min, current_num = 0, 0
-    for kansuuji in PATTERN_KANSUUJI.findall(kanjis):
-        if kansuuji in NUMBER_SET:
-            current_num_min = KANJI_NUMBER_DICT[kansuuji]
-        elif kansuuji in SMALL_DIGIT_SET:
-            current_num += (current_num_min if current_num_min else 1) * 10**KANJI_SMALL_DIGIT_DICT[kansuuji]
-            current_num_min = 0
-        elif kansuuji in KANJI_DIGIT_SET:
-            result += (current_num + current_num_min) * 10**KANJI_DIGIT_DICT[kansuuji]
-            current_num = current_num_min = 0
+    if any(str.isdigit(moji) for moji in kanjis):
+        # 入力に数字が含まれている場合
+        value = 0
+        while kanjis:
+            left_value = PATTERN_LEFT_VALUE.search(kanjis)
+            current, float_number, small_digit, kanjis = left_value.groups()
+            current = int(current or 1)
+            if float_number:
+                current += float(float_number)
+            if small_digit:
+                current *= 10**KANJI_SMALL_DIGIT_DICT[small_digit]
+            value += current
+
+            head = re.match(rf'{"|".join(KANJI_DIGIT_SET)}', kanjis)
+            if not kanjis or head:
+                digit = head.group(0) if kanjis else ''
+                result += value * 10 ** KANJI_DIGIT_DICT.get(digit, 0)
+                value = 0
+                kanjis = kanjis[len(digit):]
+        return result
+    else:
+        current_num_min, current_num = 0, 0
+        for kansuuji in PATTERN_KANSUUJI.findall(kanjis):
+            if kansuuji in NUMBER_SET:
+                current_num_min = KANJI_NUMBER_DICT[kansuuji]
+            elif kansuuji in SMALL_DIGIT_SET:
+                current_num += (current_num_min if current_num_min else 1) * 10**KANJI_SMALL_DIGIT_DICT[kansuuji]
+                current_num_min = 0
+            elif kansuuji in KANJI_DIGIT_SET:
+                result += (current_num + current_num_min) * 10**KANJI_DIGIT_DICT[kansuuji]
+                current_num = current_num_min = 0
 
     return result + current_num + current_num_min
 

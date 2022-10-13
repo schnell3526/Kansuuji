@@ -1,0 +1,1 @@
+from .kansuuji import kanji2int

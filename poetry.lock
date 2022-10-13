@@ -97,6 +97,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "mojimoji"
+version = "0.0.12"
+description = "A fast converter between Japanese hankaku and zenkaku characters"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "mypy"
 version = "0.982"
 description = "Optional static typing for Python"
@@ -239,7 +247,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "13d7364233b121acaef419da639da55ecc2646a7d5281a956b0ca8a605851884"
+content-hash = "d30ede918dee1fc267771e5a8416c9af669e029696e226e8ce04ccdb21ab5ae7"
 
 [metadata.files]
 attrs = [
@@ -292,6 +300,25 @@ isort = [
 mccabe = [
     {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
     {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
+]
+mojimoji = [
+    {file = "mojimoji-0.0.12-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:98f41bf146b731ed4554c60495c53fd96339a52e02b22a869d6eaf2433047505"},
+    {file = "mojimoji-0.0.12-cp36-cp36m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:61c03620528650603b3c92f367d6db2a645c2638408add5ba03fed982af7cd1d"},
+    {file = "mojimoji-0.0.12-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f7f4da9e809fa68588e817f1ae351c4274be2366e542c51393657cae7bcf114f"},
+    {file = "mojimoji-0.0.12-cp36-cp36m-win_amd64.whl", hash = "sha256:05b589361b6f35aef96df3a7f64c2a286a7e7aed9865cd7baf1a5876bb4cd16a"},
+    {file = "mojimoji-0.0.12-cp37-cp37m-macosx_10_14_x86_64.whl", hash = "sha256:a98fb09bd49245f9d9cd29603b912dc2f94e619e6d2f5b722553a5dbe113ce6c"},
+    {file = "mojimoji-0.0.12-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b110101148b920eba60fa4627b904fa18801c5ca3667880494b7f0d25dd1a5fe"},
+    {file = "mojimoji-0.0.12-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d974a034528cb9fb95fcade6f3ffb73dc1dc336e17413486a5094724cbe9e34f"},
+    {file = "mojimoji-0.0.12-cp37-cp37m-win_amd64.whl", hash = "sha256:f180e2e8ff47e54cc36b0de147bceaf76fab88ef06775835a55b38ef6b82c161"},
+    {file = "mojimoji-0.0.12-cp38-cp38-macosx_10_14_x86_64.whl", hash = "sha256:9723531661911479bbfce08ec8a62c7b5958a307f33a025fe938d19550b13f9d"},
+    {file = "mojimoji-0.0.12-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:7a15864d8de07a487280c528fe3d2aeaad05bb2ce6d8bf201fc1480b0b5db337"},
+    {file = "mojimoji-0.0.12-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:59cc0af7d3be3b6847c8dcf1a4e0d09cc0646ff64c101308903d14871245403c"},
+    {file = "mojimoji-0.0.12-cp38-cp38-win_amd64.whl", hash = "sha256:8a1285040b7ef7ca5bafe095b62b99507cf19e10c6000e3279bc44d9430da3d9"},
+    {file = "mojimoji-0.0.12-cp39-cp39-macosx_10_14_x86_64.whl", hash = "sha256:ae5e6e8d4e70849f4217fa00ca7d770354f5a13c04778b6f07f3bceb0a636abd"},
+    {file = "mojimoji-0.0.12-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b2247233f4b3bee6ab601ac7fcbd84124ad91788a7418c1430f93a4bac340218"},
+    {file = "mojimoji-0.0.12-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:515f6fa5659d77a172f1fb46950d34674f33cf487e9aa131bf9422cbe127e5f4"},
+    {file = "mojimoji-0.0.12-cp39-cp39-win_amd64.whl", hash = "sha256:b379781a0cb95eeb79939608b4a013ad7b79ba03b7fe9b795eadc40bd96a06c9"},
+    {file = "mojimoji-0.0.12.tar.gz", hash = "sha256:01a3d73e8b3c641386b1824d5106b8ea5c351a641623c910d89d8f02520c1b0e"},
 ]
 mypy = [
     {file = "mypy-0.982-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:5085e6f442003fa915aeb0a46d4da58128da69325d8213b4b35cc7054090aed5"},
