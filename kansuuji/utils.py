@@ -10,15 +10,18 @@ KANJI_DIGIT_DICT = {
     "載": 44, "極": 48, "恒河沙": 52, "阿僧祇": 56, "那由多": 60, "不可思議": 64, "無量大数": 68
 }
 
-PULAR_TYPO = {
-    '憶': '億'
+POPULAR_TYPO = {
+    '憶': '億', 'ニ': '二', 'ー': '一', 'ハ': '八'
 }
+def fix_typo(char: str) -> str:
+    return POPULAR_TYPO.get(char, char)
 
 NUMBER_SET = set(KANJI_NUMBER_DICT)
 SMALL_DIGIT_SET = set(KANJI_SMALL_DIGIT_DICT)
 KANJI_DIGIT_SET = set(KANJI_DIGIT_DICT)
 
-PATTERN_KANSUUJI = re.compile(r'|'.join(NUMBER_SET | SMALL_DIGIT_SET | KANJI_DIGIT_SET))
-PATTERN_DIGIT = re.compile(r'\d')
+PATTERN_KANSUUJI = re.compile(r'|'.join(NUMBER_SET))
+PATTERN_KANSUUJI_OR_DIGIT = re.compile(r'|'.join(NUMBER_SET | SMALL_DIGIT_SET | KANJI_DIGIT_SET))
 PATTERN_SYMBOLS = re.compile(r',')
 PATTERN_LEFT_VALUE = re.compile(r'(^\d*)(\.\d+)?([千百十]?)(.*)')
+PATTERN_ALL_CHARS = re.compile(r'[^(' + r')('.join(NUMBER_SET | SMALL_DIGIT_SET | KANJI_DIGIT_SET) + r')\d,.]')

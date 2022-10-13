@@ -11,18 +11,24 @@ from .utils import (
     NUMBER_SET,
     SMALL_DIGIT_SET,
     KANJI_DIGIT_SET,
-    PATTERN_KANSUUJI,
-    PATTERN_DIGIT,
     PATTERN_SYMBOLS,
-    PATTERN_LEFT_VALUE
+    PATTERN_LEFT_VALUE,
+    PATTERN_KANSUUJI_OR_DIGIT,
+    fix_typo,
+    PATTERN_ALL_CHARS
 )
 
-def kanji2int(kanjis: Union[str, int]) -> int:
+def kanji2int(kanjis: Union[str, int], remove_typo=False) -> int:
 
     if isinstance(kanjis, int): return kanjis
     if not isinstance(kanjis, str): raise ValueError('Unsupported Data Type')
+    if remove_typo:
+        kanjis = ''.join(map(fix_typo, kanjis))
     # normalization
     kanjis = mojimoji.zen_to_han(kanjis, kana=False)
+
+    if PATTERN_ALL_CHARS.search(kanjis):
+        raise ValueError()
     kanjis = PATTERN_SYMBOLS.sub('', kanjis)
 
     if len(kanjis) == 1:
@@ -53,10 +59,11 @@ def kanji2int(kanjis: Union[str, int]) -> int:
                 result += value * 10 ** KANJI_DIGIT_DICT.get(digit, 0)
                 value = 0
                 kanjis = kanjis[len(digit):]
-        return result
+            print(kanjis)
+        return int(result)
     else:
         current_num_min, current_num = 0, 0
-        for kansuuji in PATTERN_KANSUUJI.findall(kanjis):
+        for kansuuji in PATTERN_KANSUUJI_OR_DIGIT.findall(kanjis):
             if kansuuji in NUMBER_SET:
                 current_num_min = KANJI_NUMBER_DICT[kansuuji]
             elif kansuuji in SMALL_DIGIT_SET:
