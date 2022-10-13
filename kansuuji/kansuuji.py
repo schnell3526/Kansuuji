@@ -59,7 +59,6 @@ def kanji2int(kanjis: Union[str, int], remove_typo=False) -> int:
                 result += value * 10 ** KANJI_DIGIT_DICT.get(digit, 0)
                 value = 0
                 kanjis = kanjis[len(digit):]
-            print(kanjis)
         return int(result)
     else:
         current_num_min, current_num = 0, 0
