@@ -24,7 +24,14 @@ def test_kanji2int_2(kanjis, expect):
     assert output == expect
 
 @pytest.mark.parametrize('kanjis, expect',[
-    ('1千', 1000), ('肆千', 4_000), ('壱万', 10_000), ('10万', 100_000), ('1億2800万', 128_000_000), ('1億2,800万', 128_000_000)
+    ('1千', 1000), ('肆千', 4_000), ('壱万', 10_000), ('10万', 100_000), ('1億2800万', 128_000_000), ('1億2,800万', 128_000_000),
+    ('一〇', 10)
 ])
 def test_kanji2int_3(kanjis, expect):
     assert kanji2int(kanjis=kanjis) == expect
+
+@pytest.mark.parametrize('kanjis_with_typo, kanjis_correct',[
+    ('1憶', '1億'),
+])
+def test_kanji2int_4(kanjis_with_typo, kanjis_correct):
+    assert kanji2int(kanjis_with_typo, remove_typo=True) == kanji2int(kanjis_correct, remove_typo=True)
