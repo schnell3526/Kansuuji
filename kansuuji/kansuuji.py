@@ -9,10 +9,39 @@ KANJI_NUMBER_DICT = {
 }
 KANJI_SMALL_DIGIT_DICT = {"十": 1, "拾": 1, "什": 1, "百": 2, "佰": 2, "千": 3, "阡": 3, "仟": 3}
 KANJI_DIGIT_DICT = {
+    # "十": 1, "拾": 1, "什": 1, "百": 2, "佰": 2, "千": 3, "阡": 3, "仟": 3,
     "万": 4, "萬": 4, "億": 8, "兆": 12, "京": 16, "垓": 20, "𥝱": 24, "穣": 28, "溝": 32, "澗": 36, "正": 40,
     "載": 44, "極": 48, "恒河沙": 52, "阿僧祇": 56, "那由多": 60, "不可思議": 64, "無量大数": 68
 }
-def kanji2int(kanji: str) -> int:
-    if kanji in KANJI_NUMBER_DICT:
-        return KANJI_NUMBER_DICT[kanji]
+
+NUMBER_SET = set(KANJI_NUMBER_DICT)
+SMALL_DIGIT_SET = set(KANJI_SMALL_DIGIT_DICT)
+KANJI_DIGIT_SET = set(KANJI_DIGIT_DICT)
+
+PATTERN_KANSUUJI = re.compile(r'|'.join(NUMBER_SET | SMALL_DIGIT_SET | KANJI_DIGIT_SET))
+
+def kanji2int(kanjis: str) -> int:
+    if kanjis in NUMBER_SET:
+        return KANJI_NUMBER_DICT[kanjis]
+
+    if kanjis in SMALL_DIGIT_SET:
+        return 10**KANJI_SMALL_DIGIT_DICT[kanjis]
+
+    if kanjis in KANJI_DIGIT_SET:
+        return 10**KANJI_DIGIT_DICT[kanjis]
+
+    result = 0
+    current_num_min, current_num = 0, 0
+    for kansuuji in PATTERN_KANSUUJI.findall(kanjis):
+        if kansuuji in NUMBER_SET:
+            current_num_min = KANJI_NUMBER_DICT[kansuuji]
+        elif kansuuji in SMALL_DIGIT_SET:
+            current_num += (current_num_min if current_num_min else 1) * 10**KANJI_SMALL_DIGIT_DICT[kansuuji]
+            current_num_min = 0
+        elif kansuuji in KANJI_DIGIT_SET:
+            result += (current_num + current_num_min) * 10**KANJI_DIGIT_DICT[kansuuji]
+            current_num = current_num_min = 0
+
+    return result + current_num + current_num_min
+
     raise Exception('NOT implemented !')
