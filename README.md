@@ -30,4 +30,10 @@ pip install .
 ```shell
 git clone git@github.com:schnell3526/Kansuuji.git
 cd Kansuuji
+poetry install
+```
+
+run tests
+```shell
+pytest
 ```
