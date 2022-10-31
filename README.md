@@ -23,7 +23,7 @@ print(kanji2int('1憶'))
 ```shell
 git clone git@github.com:schnell3526/Kansuuji.git
 cd Kansuuji
-pip instal .
+pip install .
 ```
 
 ## for developers
